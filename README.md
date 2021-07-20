@@ -10,6 +10,5 @@ git checkout <yourname>
 git commit -m "Added my branch"
 git push -u origin <yourname>
 ```
-- Maintain a text file - Write all the changes done by you in the file 
-- Write comments wherever applicable
+
 
