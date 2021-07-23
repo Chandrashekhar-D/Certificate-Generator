@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const csv = require('fast-csv');
 const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 
 
 router.get('/',(req,res)=>{
@@ -20,6 +21,7 @@ router.get('/',(req,res)=>{
 //     file.mv("./uploads/"+file.name);
 //     file.mv("./uploads/"+csv.name);
 // })
+
 
 router.post('/api',async(req,res)=>{
 
@@ -79,9 +81,8 @@ console.log(str)
         from: '" from dsc 👻" <dummy0123456789@gmail.com>',
         to: address, 
         subject: "Hello ✔", // Subject line
-        text: "Hello world?", // plain text body
-        html: "<b>Hello world?</b>, ", // html body
-        html:"Embedded image: <img src='cid:unique@nodemailer.com'/>",
+        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent turpis neque, placerat sed vestibulum sit amet, lacinia eget ante. Vivamus pulvinar eu eros quis rhoncus. Pellentesque interdum risus quis urna posuere auctor et sit amet eros. Suspendisse facilisis lacinia eros sed accumsan. Ut rhoncus orci sit amet tempus pulvinar. ", // plain text body
+        html: "<h1>Congratulations you have earned Certificate</h3>  ", // html body
         attachments: [{
             filename: 'image.png',
             path: data.img

@@ -5,8 +5,12 @@ const upload = require('express-fileupload')
 const fs = require('fs');
 const path = require('path');
 const csv = require('fast-csv');
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 const nodemailer = require('nodemailer');
+
+// app.use(express.bodyParser({limit: '50mb'}));
+// app.use(express.bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
+
 
 // reading csv and storing in results 
 // const results = [];
@@ -19,7 +23,9 @@ const nodemailer = require('nodemailer');
 
 // // to use express-file upload 
 app.use(upload());
-app.use(express.json());
+// app.use(express.json());
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 // // linking routes
 app.use(require('./router/auth'));
 
@@ -31,7 +37,7 @@ app.use(express.json());
 app.get('/' ,(req,res)=>{
     res.sendFile(__dirname+'/index.html')
 })
-app.use(upload())
+
 app.use(express.json());
 
 
