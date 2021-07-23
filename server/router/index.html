@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certificate Generator</title>
+    <style>
+      .form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .form-item {
+        margin: 2%;
+      }
+      .head {
+        text-align: center;
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="head">Certificate Generator</h1>
+    <form action="/" method="POST" enctype="multipart/form-data">
+      <div class="form">
+        <div class="form-item">
+          <label for="file"> Upload Certificate Template: </label>
+          <input type="file" name="file" />
+        </div>
+        <div class="form-item">
+          <label for="csv">Upload CSV: </label> 
+          <input type="file" name="csv" />
+        </div>
+        <div class="form-item">
+            <input type="submit" value="Upload" id="" class="button form-item" />
+        </div>
+      </div>
+    </form>
+  </body>
+</html>
