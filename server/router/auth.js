@@ -26,55 +26,23 @@ router.get('/',(req,res)=>{
 router.post('/api',async(req,res)=>{
 
     const data = req.body;
-    // console.log(req.body.csvData)
-    // console.log(req.body.key)
-    console.log('string',data);
-
-    // console.log(typeof data)
-    console.log(typeof data.csvData)
-    console.log(data.csvData)
     var csvobj=data.csvData
-    // data.splice(-1)
-
     var arrayLength = csvobj.length;
     var address=""
 for (var i = 0; i < arrayLength; i=i+1) {
     console.log((csvobj[i]).split(",")[2])
     address=(csvobj[i]).split(",")[2]+","+address
     str = address.replace(/,\s*$/, "");
-    //Do something
 }
 
-console.log(address)
-console.log(str)
-
-
- 
- 
-
-    // console.log(data.key);
-    // console.log(typeof(data))
-    // res.json({message:req})
-
-    
-    // req.files.file.mv("./uploads"+filen2,function(err){
-    //     if(err){
-    //         console.log("error")
-    //     } else{
-    //         console.log("file uploaded")
-    //     }
-    // })
-    // const email = req.body;
-    //  console.log(email.email)
-        // create reusable transporter object using the default SMTP transport
     
     const transporter = nodemailer.createTransport({
         service: "gmail",
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-        user: 'dummyacc012345689@gmail.com', // generated ethereal user
-        pass: 'dummy@321', // generated ethereal password
+        user: '', // generated ethereal user
+        pass: '', // generated ethereal password
         },
     });
     const msg = {
@@ -84,7 +52,7 @@ console.log(str)
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent turpis neque, placerat sed vestibulum sit amet, lacinia eget ante. Vivamus pulvinar eu eros quis rhoncus. Pellentesque interdum risus quis urna posuere auctor et sit amet eros. Suspendisse facilisis lacinia eros sed accumsan. Ut rhoncus orci sit amet tempus pulvinar. ", // plain text body
         html: "<h1>Congratulations you have earned Certificate</h3>  ", // html body
         attachments: [{
-            filename: 'image.png',
+            filename: 'certificate.png',
             path: data.img
         }]
     }
