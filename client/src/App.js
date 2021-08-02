@@ -1,14 +1,15 @@
 import "./App.css";
 import React, { useEffect, useState, useRef } from "react";
+
 import {
   ChakraProvider,
   useDisclosure,
-  Button,
+  button,
   Input,
   Drawer,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton,
+  DrawerClosebutton,
   DrawerBody,
   DrawerHeader,
 } from "@chakra-ui/react";
@@ -16,6 +17,7 @@ import html2canvas from "html2canvas";
 import domtoimage from "dom-to-image";
 
 function App() {
+  var toggled=true
   const [image, setImage] = useState(); 
   const [name, setName] = useState();
   const [preview, setPreview] = useState();
@@ -23,7 +25,7 @@ function App() {
   const [csvData, setCsvData] = useState("");
   const [sendData, setSendData] = useState();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
 
   const btnRef = useRef();
 
@@ -38,8 +40,10 @@ function App() {
       setPreview(null);
     }
   }, [image]);
+  
 
   function uploaded() {
+    var nameinput=document.getElementById("name")
     document.getElementById("name").style.position = "absolute";
     document.querySelector("#name").style.top = "100px";
     document.querySelector("#name").style.left = "300px";
@@ -78,6 +82,8 @@ function App() {
   };
 
   const download = () => {
+    document.querySelector("#name").style.top=parseInt(document.querySelector("#name").style.top)-71+"px"
+    document.querySelector("#name").style.left=parseInt(document.querySelector("#name").style.left)-5.3+"px"
     var node = document.getElementById("capture");
     domtoimage
       .toPng(node)
@@ -92,6 +98,7 @@ function App() {
 
   // To download the certificate template
   function downloadURI(uri, name) {
+    
     var link = document.createElement("a");
     link.download = name;
     link.href = uri;
@@ -128,25 +135,33 @@ function App() {
     };
     reader.readAsText(event.target.files[0]);
   };
+ 
 
   return (
-    <ChakraProvider>
-     
-            <div className="App">
-            <div id="capture">
+    // <ChakraProvider>
+    <div>
+    <div id="navbar">Developer Students Club Vishwakarma Institute of Technology Pune</div>
+    <div id="main">
+      
+            <div id="App" >
+            <div id="capture"  >
               {name ? <p id="name">{name}</p> : <p id="name"></p>}
               {preview ? <img src={preview} alt="" id="template" /> : <p id="template"> </p> }
-            </div>
-            <input
+            
+            
+              </div>
+              <div id="guidelines">
+              <input
                 type="file"
                 name="template"
                 id="image_input"
                 accept="image/*"
                 onChange={(e) => {
-                  document.getElementById('image_input').style.display="none";
+                  document.getElementById('guidelines').style.display="none";
                   document.getElementById("template").style.position = "absolute";
-                  document.querySelector("#template").style.top = "0px";
-                  document.querySelector("#template").style.left = "0px";
+                  // document.querySelector("#template").style.top = "0px";
+                  // document.querySelector("#template").style.left = "0px";
+                  
                   const file = e.target.files[0];
                   if (file) {
                     setImage(file);
@@ -156,26 +171,41 @@ function App() {
                   }
                 }}
               />
+              <ul  type="square" id="guide">
+                <li>Upload the Template Image from 'Choose File' above</li><br/>
+                <li className="red"><strong>Upload the CSV, containing name and emails only of recipients,  from 'Choose File' from Side Panel</strong></li><br/>
+                <li className="red">If the Side Panel of properties isn't visible, click on Toggle Arrow to make it so</li><br/>
+                <li>You can insert a text and adjust it's rendering over the template by using shortcuts too</li><br/>
+                <li className="red"><strong>Note that the names from CSV will appear in place of final test text that you adjust.</strong></li><br/>
+                <li>After finalizing positions, click on 'Generate Certificates', to generate and mail certificates.</li><br/>
+                <li>You can optionally even download the tested Certificate, to adjudge.</li><br/>
+              </ul>
+              </div>
             </div>
             <br /> <br />
-      <Button ref={btnRef} colorScheme="teal" onClick={onOpen} mx={5}>
-        Open Properties
-      </Button>
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Properties</DrawerHeader>
+      {/* <button ref={btnRef} colorScheme="teal" onClick={onOpen} mx={5}> */}
+        {/* Open Properties */}
+      {/* </button> */}
+      {/* <Drawer */}
+        {/* isOpen={isOpen} */}
+        {/* placement="right" */}
+        {/* onClose={onClose} */}
+        {/* finalFocusRef={btnRef} */}
+      {/* > */}
+        {/* <DrawerOverlay /> */}
+        {/* <DrawerContent> */}
+          {/* <DrawerClosebutton /> */}
+          {/* <DrawerHeader>Properties</DrawerHeader> */}
 
-          <DrawerBody>
-            <form method="POST">
-              <Input
-                mb={3}
+          {/* <DrawerBody> */}
+          
+            
+              <div id="controls">
+              
+              <form method="POST">
+                <br/>
+              <input
+                id="entertesttext"
                 type="text"
                 name=""
                 placeholder="Enter your name"
@@ -183,52 +213,127 @@ function App() {
                   setName(e.target.value);
                 }}
               />
-              <Input
-                mb={3}
+                           
+              
+              <br/><br/>
+              <label id="csvlabel">Upload CSV</label><br/><br/>
+              <input id="upcsv"  type="file" name="csv" onChange={readCSV} /><br/><br/>
+              <input id="email" type="text" placeholder="Enter your email" /><br/><br/>
+              <input id="passw" type="text" placeholder="Enter your password" /><br/><br/>
+            
+              <button type="button"  onClick={post}>
+                
+                Generate Certificates
+              </button>
+              </form>
+              <br/>
+              <button onClick={download}>Download</button>
+              </div>
+              <div id="side-panel">
+               <div>
+                 <br/>
+                 <img id="toggle"  height="35px" width="35px"
+                 
+                 src={'gdgtogglein.png'}
+                 onClick={()=>{
+                 if(toggled==true){
+                  var sidepanel=document.getElementById('side-panel')
+                  sidepanel.style.transform="translate3d(0.5px,0,0)";
+                  document.getElementById('toggle').src="gdgtoggleout.png"
+                  toggled=false
+                 }
+                 else{
+                  var sidepanel=document.getElementById('side-panel')
+                  sidepanel.style.transform="translate3d(205.5px,0,0)";
+                  document.getElementById('toggle').src="gdgtogglein.png"
+                  toggled=true
+                 }
+                  
+                }}
+                />
+                 <br/>
+                 <br/>
+                <img src={'font.png'} height="25px" width="25px" onClick={()=>{
+                  var sidepanel=document.getElementById('side-panel')
+                  sidepanel.style.transform="translate3d(0.5px,0,0)";
+                  document.getElementById('toggle').src="gdgtoggleout.png"
+                }} />
+                <select id="fontselect" onChange={(x)=>{
+                   console.log(x.target.value)
+                   document.getElementById("name").style.fontFamily = x.target.value;
+                   
+                }}>
+                 
+                  
+                  
+                  
+                  <option value="verdana">Verdana</option>
+                  <option value="Arial">Arial</option>
+                  <option value="cursive">Cursive</option>
+                  <option value="fantasy">Fantasy</option>
+                  <option value="georgia">Georgia</option>
+                  <option  value="'Playfair Display', serif">Playfair Display</option>
+                  <option value="Times New Roman">Times New Roman</option>
+                  <option value="Cambria">Cambria</option>
+                  
+                  
+                  </select><br/><br/>
+                <img src={'color.png'}  onClick={()=>{
+                  var sidepanel=document.getElementById('side-panel')
+                  sidepanel.style.transform="translate3d(0.5px,0,0)";
+                  document.getElementById('toggle').src="gdgtoggleout.png"
+                }} height="25px" width="25px" />
+              <input
+               id="colors"
                 type="color"
                 onChange={(e) => {
                   setColor(e.target.value);
                   changeColor();
                 }}
-              />
-              <Button mb={3} onClick={move_up} colorScheme="blue">
+              /><br/><br/>
+              <img src={'up.png'} onClick={move_up} height="25px" width="25px" />
+              <button id="up" onClick={move_up} >
                 Move Up
-              </Button>{" "}
-              <br />
-              <Button mb={3} onClick={move_down} colorScheme="blue">
+              </button>
+              <br /><br/>
+              <img src={'down.png'} onClick={move_down} height="25px" width="25px" />
+              <button id="down" onClick={move_down} >
                 Move Down
-              </Button>{" "}
-              <br />
-              <Button mb={3} onClick={move_left} colorScheme="blue">
+              </button>
+              <br /><br/>
+             <img src={'left.png'}  onClick={move_left} height="25px" width="25px" />
+              <button id="left" onClick={move_left} >
                 Move Left
-              </Button>{" "}
-              <br />
-              <Button mb={3} onClick={move_right} colorScheme="blue">
+              </button>
+              <br /><br/>
+              <img src={'right.png'} onClick={move_right} height="25px" width="25px" />
+              <button id="right" onClick={move_right} >
                 Move Right
-              </Button>{" "}
-              <br />
-              <Button mb={3} onClick={fontplus} colorScheme="blue">
+              </button>
+              <br /><br/>
+              <img src={'plus.png'} onClick={fontplus} height="25px" width="25px" />
+              <button id="f+" onClick={fontplus} >
                 Increase Font
-              </Button>{" "}
-              <br />
-              <Button mb={3} onClick={fontmin} colorScheme="blue">
+              </button>
+              <br /><br/>
+              <img src={'minus.png'} onClick={fontmin} height="25px" width="25px" />
+              <button id="f-" onClick={fontmin} >
                 Decrease Font
-              </Button>{" "}
-              <br />
-              <Input mb={3} p={1} type="file" name="csv" onChange={readCSV} />
-              <Input mb={3} type="text" placeholder="Enter your email" />
-              <Input mb={3} type="text" placeholder="Enter your password" />
-              <Button mb={3} type="button" colorScheme="red" onClick={post}>
-                {" "}
-                Generate Certificates{" "}
-              </Button>
-              <br />
-              <Button onClick={download}>Download</Button>
-            </form>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
-    </ChakraProvider>
+              </button>
+              <img/>
+              {/* <button onClick={
+                ()=>{
+                  document.getElementById('capture').style.width="400px"
+                }
+              }>Portrait/Landscape</button> */}
+              </div>
+              </div>
+          {/* </DrawerBody> */}
+        {/* </DrawerContent> */}
+      {/* </Drawer> */}
+     {/* // </ChakraProvider>  */}
+     </div>
+     </div>
   );
 }
 
