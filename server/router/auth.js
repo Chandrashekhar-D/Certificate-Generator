@@ -63,7 +63,9 @@ router.post("/api", async (req, res) => {
   console.log("CSV Data : ",csvobj);
   console.log()
 
-  csvEmails=address.split(","); 
+  csvEmails=address.split(",");
+  csvEmails.pop() 
+  csvEmails.reverse()
   console.log("THIS IS MAIL ARRAY");
   csvEmails.forEach(element => {
     console.log(element);
@@ -136,7 +138,7 @@ const msg = {
     from: '" from dsc 👻" <dummy012345689@gmail.com>',
     to: element,
     subject: "Hello ✔", // Subject line
-    text:csvNames[count], // plain text body
+    text:`Hello, ${csvNames[count]} you have earned a certificate.`, // plain text body
     // html: "<h1>Congratulations you have earned Certificate</h3>  ", // html body
     attachments: [{
         filename: 'certificate.png',
