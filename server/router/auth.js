@@ -63,7 +63,7 @@ router.post("/api", async (req, res) => {
   console.log("CSV Data : ",csvobj);
   console.log()
 
-  csvEmails = address.split(",");
+  csvEmails=address.split(","); 
   console.log("THIS IS MAIL ARRAY");
   csvEmails.forEach(element => {
     console.log(element);
@@ -97,6 +97,7 @@ router.post("/api", async (req, res) => {
 
 
 //ITEERATION______
+let count=0;
 csvEmails.forEach(async element=>{
   cnt=parseInt(csvEmails.indexOf(element));
   console.log(typeof(cnt))
@@ -126,7 +127,7 @@ csvEmails.forEach(async element=>{
   .draw(ctx => {
       ctx.fillStyle = '#000000';
       ctx.font = '50 Open Sans';
-      ctx.fillText(`${userData.element}`, 100, 500);
+      ctx.fillText(`${csvNames[count]}`, 100, 500);
   })
   .save(`out/certificate.jpg`)
   .then(() => console.log('Image Saved'))
@@ -135,14 +136,14 @@ const msg = {
     from: '" from dsc 👻" <dummy012345689@gmail.com>',
     to: element,
     subject: "Hello ✔", // Subject line
-    text:userData.element, // plain text body
+    text:csvNames[count], // plain text body
     // html: "<h1>Congratulations you have earned Certificate</h3>  ", // html body
     attachments: [{
         filename: 'certificate.png',
         path: `out/certificate.jpg`
     }]
 }
-
+count=count+1;
 // send mail with defined transport object
 let info = await transporter.sendMail(msg);
 
