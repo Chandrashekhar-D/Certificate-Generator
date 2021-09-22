@@ -6,6 +6,7 @@ const csv = require("fast-csv");
 const nodemailer = require("nodemailer");
 const Image = require("purified-image");
 const { dirname } = require("path");
+const { count } = require("console");
 
 
 router.get("/", (req, res) => {
@@ -37,7 +38,7 @@ router.post("/api", async (req, res) => {
   let csvobj = await data.csvData;
   let csvNames = [];
   let csvEmails = [];
-  let name = [];
+  // let name = [];
   var arrayLength = csvobj.length;
   var address = "";
   for (var i = 0; i < arrayLength - 1; i = i + 1) {
@@ -45,6 +46,16 @@ router.post("/api", async (req, res) => {
     address = csvobj[i].split(",")[2] + "," + address;
     str = address.replace(/,\s*$/, "");
   }
+
+  for (var i = 0; i < arrayLength - 1; i = i + 1) {
+    console.log(csvobj[i].split(",")[0]);
+    console.log(csvobj[i].split(",")[1]);
+    recName=csvobj[i].split(",")[0]+" "+csvobj[i].split(",")[1]
+    csvNames.push(recName)
+  }
+  console.log(csvNames)
+
+
   console.log("Sender Email : ",senderEmail);
   console.log()
   console.log("Sender Password : ",senderPassword);
@@ -52,54 +63,133 @@ router.post("/api", async (req, res) => {
   console.log("CSV Data : ",csvobj);
   console.log()
 
+  csvEmails = address.split(",");
+  console.log("THIS IS MAIL ARRAY");
+  csvEmails.forEach(element => {
+    console.log(element);
+  });
+  console.log(csvEmails);
+
+  var userData=[]
+
+  for (let i=0; i<csvEmails.length ; i++){
+    userData[csvEmails[i]]=csvNames[i];
+  }
+  console.log(userData)
+
+ 
 
 
-  //To render image at backend
-let image = new Image(`uploads/temp.jpg`);
-image
-.loadFont('fonts/OpenSans.ttf')
-.draw(ctx => {
-    ctx.fillStyle = '#000000';
-    ctx.font = '50 Open Sans';
-    ctx.fillText('example', 100, 500);
-})
-.save(`out/certificate.jpg`)
-.then(() => console.log('Image Saved'))
-.catch((err)=>console.log(err));
+//   //To render image at backend
+// let image = new Image(`uploads/temp.png`);
+// image
+// .loadFont('fonts/OpenSans.ttf')
+// .draw(ctx => {
+//     ctx.fillStyle = '#000000';
+//     ctx.font = '50 Open Sans';
+//     ctx.fillText(`${csvNames}`, 100, 500);
+// })
+// .save(`out/certificate.jpg`)
+// .then(() => console.log('Image Saved'))
+// .catch((err)=>console.log(err));
+
+
+
+
+//ITEERATION______
+csvEmails.forEach(async element=>{
+  cnt=parseInt(csvEmails.indexOf(element));
+  console.log(typeof(cnt))
+  console.log(cnt)
+  console.log(csvNames[cnt])
+  console.log(typeof(csvNames[cnt]))
+  receiverName=csvNames[cnt];
 
   const transporter = await nodemailer.createTransport({
-      service: "gmail",
-      port: 587,
-      secure: false, // true for 465, false for other ports
-      auth: {
-      user: 'dummyacc012345689@gmail.com', // generated ethereal user
-      pass: 'dummy@321', // generated ethereal password
-      // user: `${senderEmail}`, // generated ethereal user
-      // pass: `${senderPassword}`, // generated ethereal password
-      },
-  });
-  const msg = {
-      from: '" from dsc 👻" <dummy012345689@gmail.com>',
-      to: address,
-      subject: "Hello ✔", // Subject line
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent turpis neque, placerat sed vestibulum sit amet, lacinia eget ante. Vivamus pulvinar eu eros quis rhoncus. Pellentesque interdum risus quis urna posuere auctor et sit amet eros. Suspendisse facilisis lacinia eros sed accumsan. Ut rhoncus orci sit amet tempus pulvinar. ", // plain text body
-      html: "<h1>Congratulations you have earned Certificate</h3>  ", // html body
-      attachments: [{
-          filename: 'certificate.png',
-          path: `out/certificate.jpg`
-      }]
-  }
+    service: "gmail",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+    user: 'dummyacc012345689@gmail.com', // generated ethereal user
+    pass: 'dummy@321', // generated ethereal password
+    // user: `${senderEmail}`, // generated ethereal user
+    // pass: `${senderPassword}`, // generated ethereal password
+    },
 
-  // send mail with defined transport object
-  let info = await transporter.sendMail(msg);
 
-  console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+});
 
-  // Preview only available when sending through an Ethereal account
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-      console.log("email sent")
+  //To render image at backend
+  let image = new Image(`uploads/temp.png`);
+  image
+  .loadFont('fonts/OpenSans.ttf')
+  .draw(ctx => {
+      ctx.fillStyle = '#000000';
+      ctx.font = '50 Open Sans';
+      ctx.fillText(`${userData.element}`, 100, 500);
+  })
+  .save(`out/certificate.jpg`)
+  .then(() => console.log('Image Saved'))
+  .catch((err)=>console.log(err));
+const msg = {
+    from: '" from dsc 👻" <dummy012345689@gmail.com>',
+    to: element,
+    subject: "Hello ✔", // Subject line
+    text:userData.element, // plain text body
+    // html: "<h1>Congratulations you have earned Certificate</h3>  ", // html body
+    attachments: [{
+        filename: 'certificate.png',
+        path: `out/certificate.jpg`
+    }]
+}
+
+// send mail with defined transport object
+let info = await transporter.sendMail(msg);
+
+console.log("Message sent: %s", info.messageId);
+// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+// Preview only available when sending through an Ethereal account
+console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+// Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    console.log("email sent")
+    
+
+});
+
+  // const transporter = await nodemailer.createTransport({
+  //     service: "gmail",
+  //     port: 587,
+  //     secure: false, // true for 465, false for other ports
+  //     auth: {
+  //     user: 'dummyacc012345689@gmail.com', // generated ethereal user
+  //     pass: 'dummy@321', // generated ethereal password
+  //     // user: `${senderEmail}`, // generated ethereal user
+  //     // pass: `${senderPassword}`, // generated ethereal password
+  //     },
+  // });
+  // const msg = {
+  //     from: '" from dsc 👻" <dummy012345689@gmail.com>',
+  //     to: address,
+  //     subject: "Hello ✔", // Subject line
+  //     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent turpis neque, placerat sed vestibulum sit amet, lacinia eget ante. Vivamus pulvinar eu eros quis rhoncus. Pellentesque interdum risus quis urna posuere auctor et sit amet eros. Suspendisse facilisis lacinia eros sed accumsan. Ut rhoncus orci sit amet tempus pulvinar. ", // plain text body
+  //     html: "<h1>Congratulations you have earned Certificate</h3>  ", // html body
+  //     attachments: [{
+  //         filename: 'certificate.png',
+  //         path: `out/certificate.jpg`
+  //     }]
+  // }
+
+  // // send mail with defined transport object
+  // // let info = await transporter.sendMail(msg);
+
+  // console.log("Message sent: %s", info.messageId);
+  // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  // // Preview only available when sending through an Ethereal account
+  // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  // // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  //     console.log("email sent")
 });
 
 
