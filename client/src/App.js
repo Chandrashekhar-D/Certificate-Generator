@@ -1,7 +1,10 @@
 import "./App.css";
 import React, { useEffect, useState, useRef } from "react";
+import Modal from 'react-modal';
 import domtoimage from "dom-to-image";
 import axios from 'axios'
+import emailTemplate from '../src/EmailFormat.jpg'
+
 
 function App() {
   var toggled = true;
@@ -13,6 +16,8 @@ function App() {
   const [sendData, setSendData] = useState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailSubject,setEmailSubject] = useState("")
+  const [emailBody,setEmailBody] = useState("")
   //*********** */
   const [top,setTop]=useState(0);
   const [left,setLeft]=useState(0);
@@ -23,6 +28,14 @@ function App() {
 
   const [fontSize,setFontSize]=useState("2rem");
   //**************** */
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+  function openModal() {
+    setIsOpen(true);
+  }
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   useEffect(() => {
     if (image) {
@@ -219,23 +232,31 @@ function App() {
         fileName:filename,
         Email:email,
         Password:password,
-        texttop:top,
-        textleft:left,
+        top:top,
+        left:left,
         color:textColor,
-        textfont:font,
-        textfontfile:fontfile,
-        textsize:fontSize }
+        font:font,
+        fontfile:fontfile,
+        fontsize:fontSize,
+        emailsubject:emailSubject,
+        emailbody:emailBody
+       }
        ),
 });
     console.log(res);
   };
+
+  const sendEmailFormat = ()=>{
+      console.log("Email format Set")
+  }
 
   const uploadTemplate = async (e)=>{
     e.preventDefault();
      let file = image;
      console.log(file);
      let formdata = new FormData();
-     formdata.append('template',file);
+     formdata.append('template',file)
+     console.log(formdata);
      generate_certificate();
     const response = await axios({
        url:'/upload',
@@ -247,11 +268,44 @@ function App() {
      })
      console.log(response);
      };
+     
 
   return (
     <div>
       <div id="navbar">
         <strong>Developer Students Club Vishwakarma Institute of Technology Pune</strong>
+        <button id="advanced_btn" onClick={openModal}>Advanced Options</button>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Example Modal"
+      >
+        <h2 >Advanced Options</h2>
+        <div className="fcontainer">
+          <div className="inputs">
+            <div className="subject">
+            <label htmlFor="subject_input">Enter Subject : </label>
+            <input type="text" name="subject_input" onChange={(e)=>{
+                setEmailSubject(e.target.value)
+            }}/>
+            </div>
+            <br />
+            <div className="email_body">
+              <textarea name="email_body" id="" cols="40" rows="22" onChange={(e)=>{
+                setEmailBody(e.target.value)
+              }}>Enter HTML Body here. Enter $ for name</textarea>
+            </div>
+            <br />
+            <button type="submit" onClick={sendEmailFormat}>Set Email Format</button>
+          </div>
+          <div className="sample-image">
+            <img src={emailTemplate} alt="" />
+          </div>
+        </div>
+        
+        <button onClick={closeModal}>close</button>
+      </Modal>
+
       </div>
       <div id="main">
         <div id="App">
@@ -315,7 +369,7 @@ function App() {
             <br />
             <br />
             <input id="upcsv" type="file" name="csv" onChange={readCSV} />
-            
+            <br />
          </div>
          <div class="steps" id="step3">
          <br />

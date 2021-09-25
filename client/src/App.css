@@ -256,3 +256,16 @@ background-color: rgb(88, 88, 199);
   font-family: 'Playfair Display', serif;
   
 }
+
+.fcontainer{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.inputs{
+  display: flex;
+  flex-direction: column;
+}
+#advanced_btn{
+  margin-left: 10px;
+}
