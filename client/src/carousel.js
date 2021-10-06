@@ -44,19 +44,17 @@ getbutton[k-1].className +="active";
 setTimeout(autoslideshow,4000);
 }
     useEffect(()=>{
-       
         autoslideshow();
-       
     },[])
     
     return(
         
             <div class="card mb-4 mt-4 " style={{backgroundColor:'#BDC7C9', width:100+'%'}}>
                 <div class="d-flex justify-content-center pb-2 pt-3" >
-            <div className="slide active w-100"><img  height="300px" width="100%" src={"phh1.jpg"}></img></div>
-            <div className="slide w-100"><img height="300px"  width="100%" src={"fin2.png"}></img></div>
-            <div  className="slide w-100"><img  height="300px"  width="100%" src={"Screenshot.png"}></img></div>
-            <div  className="slide w-100"><img   height="300px"  width="100%" src={"Screenshot2.png"}></img></div>
+            <div className="slide active w-100"><img alt="" height="300px" width="100%" src={"phh1.jpg"}></img></div>
+            <div className="slide w-100"><img alt="" height="300px"  width="100%" src={"fin2.png"}></img></div>
+            <div  className="slide w-100"><img alt=""  height="300px"  width="100%" src={"Screenshot.png"}></img></div>
+            <div  className="slide w-100"><img alt=""  height="300px"  width="100%" src={"Screenshot2.png"}></img></div>
             </div>
   <div class="card-body pt-0">
   <div class=" pt-2 pb-1 d-flex justify-content-center">

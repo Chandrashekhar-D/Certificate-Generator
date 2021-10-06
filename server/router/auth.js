@@ -50,28 +50,9 @@ router.post("/api", async (req, res) => {
     csvNames.push(element.split(",")[0]);
   });
 
-  console.log("CSV object = ",csvobj);
-  console.log("top = ",top);
-  console.log("left = ",left);
-  console.log("font = ",font);
-  console.log("fontfile = ",fontfile);
-  console.log("fontsize = ",fontsize);
-  console.log("fontsizefinal = ",fontsizefinal);
-  console.log("color = ",color);
-  console.log("filename = ",fileName);
-  console.log("emailsubject = ",emailsubject);
-  console.log("emailbody = ",emailbody);
-  console.log("senderemail = ",senderEmail);
-  console.log("senderpasswrd = ",senderPassword);
-  console.log("CSV emails = ",csvEmails);
-  console.log("CSV names = ",csvNames);
-  
-
   for (const element of csvEmails) {
     var i = parseInt(csvEmails.indexOf(element));
-    console.log(i);
     var certdate=Date.now();
-  
     let emailBody = emailbody.replace('$',`${csvNames[i]}`)
     let image = new Image(`uploads/${fileName}`);
     await image
@@ -79,8 +60,6 @@ router.post("/api", async (req, res) => {
       .draw((ctx) => {
         ctx.fillStyle = color;
         ctx.font = `${fontsize} ${font}`;
-        // ctx.font = `${fontsizefinal} ${font}`;
-        // ctx.fillText(`${csvNames[i]}`, 100,100);
         ctx.fillText(`${csvNames[i]}`, left, top);
       })
       .save(`out/${csvNames[i]}-certificate-${certdate}.jpg`)
@@ -92,10 +71,6 @@ router.post("/api", async (req, res) => {
       port: 587,
       secure: false,
       auth: {
-        // user: Email,
-        // pass: Password,
-        // user: "dummyacc012345689@gmail.com",
-        // pass: "dummy@321",
         user: `${senderEmail}`,
         pass: `${senderPassword}`,
       },
